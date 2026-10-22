@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Number System Converter</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #101827;
+  color: #e8eef8;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: 540px;
+  padding: 30px;
+  background: #192438;
+  border: 1px solid #2b3b54;
+  border-radius: 18px;
+  box-shadow: 0 15px 40px #00000030;
+}
+
+h1 {
+  margin: 0 0 10px;
+  text-align: center;
+  font-size: 27px;
+}
+
+.subtitle {
+  margin: 0 0 28px;
+  color: #9eafc7;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.converter {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  padding: 16px;
+  background: #111b2b;
+  border: 1px solid #30415a;
+  border-radius: 12px;
+}
+
+.field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.base {
+  color: #66d9c0;
+  font-size: 12px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+input {
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #354862;
+  border-radius: 8px;
+  outline: none;
+  background: #1b2940;
+  color: #ffffff;
+  font-family: Consolas, monospace;
+  font-size: 16px;
+}
+
+input:focus {
+  border-color: #66d9c0;
+  box-shadow: 0 0 0 2px #66d9c020;
+}
+
+input.invalid {
+  border-color: #ff7777;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+  padding: 10px 12px;
+  border: 1px solid #354862;
+  border-radius: 8px;
+  background: #253650;
+  color: #dce8f7;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  background: #344964;
+}
+
+.message {
+  min-height: 18px;
+  margin-top: 7px;
+  color: #ff9292;
+  font-size: 12px;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+button {
+  font-family: inherit;
+}
+
+.action-btn {
+  padding: 11px 20px;
+  border: none;
+  border-radius: 9px;
+  background: #66d9c0;
+  color: #10251f;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.action-btn:hover {
+  background: #8cebd7;
+}
+
+#clearBtn {
+  background: #293950;
+  color: #e8eef8;
+}
+
+#clearBtn:hover {
+  background: #384b65;
+}
+
+.note {
+  margin: 22px 0 0;
+  color: #9eafc7;
+  font-size: 12px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.status {
+  min-height: 18px;
+  margin-top: 12px;
+  color: #66d9c0;
+  text-align: center;
+  font-size: 12px;
+}
+
+@media (max-width: 420px) {
+  .container {
+    padding: 22px 16px;
+  }
+
+  h1 {
+    font-size: 23px;
+  }
+
+  .field {
+    padding: 12px;
+  }
+
+  input {
+    font-size: 14px;
+  }
+}
+</style>
+</head>
+
+<body>
+<main class="container">
+  <h1>Number System Converter</h1>
+  <p class="subtitle">
+    Convert numbers between decimal, binary, octal, and hexadecimal instantly.
+  </p>
+
+  <div class="converter">
+    <div class="field">
+      <div class="field-header">
+        <label for="decimal">Decimal</label>
+        <span class="base">Base 10</span>
+      </div>
+      <div class="input-row">
+        <input id="decimal" type="text" inputmode="decimal"
+          placeholder="Enter a decimal integer" autocomplete="off"
+          spellcheck="false">
+        <button class="copy-btn" data-copy="decimal" aria-label="Copy decimal">Copy</button>
+      </div>
+      <div class="message" id="decimalMsg"></div>
+    </div>
+
+    <div class="field">
+      <div class="field-header">
+        <label for="binary">Binary</label>
+        <span class="base">Base 2 · 0–1</span>
+      </div>
+      <div class="input-row">
+        <input id="binary" type="text" inputmode="numeric"
+          placeholder="e.g. 1010" autocomplete="off" spellcheck="false">
+        <button class="copy-btn" data-copy="binary" aria-label="Copy binary">Copy</button>
+      </div>
+      <div class="message" id="binaryMsg"></div>
+    </div>
+
+    <div class="field">
+      <div class="field-header">
+        <label for="octal">Octal</label>
+        <span class="base">Base 8 · 0–7</span>
+      </div>
+      <div class="input-row">
+        <input id="octal" type="text" inputmode="numeric"
+          placeholder="e.g. 12" autocomplete="off" spellcheck="false">
+        <button class="copy-btn" data-copy="octal" aria-label="Copy octal">Copy</button>
+      </div>
+      <div class="message" id="octalMsg"></div>
+    </div>
+
+    <div class="field">
+      <div class="field-header">
+        <label for="hexadecimal">Hexadecimal</label>
+        <span class="base">Base 16 · 0–9, A–F</span>
+      </div>
+      <div class="input-row">
+        <input id="hexadecimal" type="text"
+          placeholder="e.g. FF" autocomplete="off" spellcheck="false">
+        <button class="copy-btn" data-copy="hexadecimal" aria-label="Copy hexadecimal">Copy</button>
+      </div>
+      <div class="message" id="hexadecimalMsg"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="action-btn" id="clearBtn">Clear All</button>
+  </div>
+
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+
+  <p class="note">
+    Enter a whole number in any field. All other number systems update automatically.
+    Negative integers are supported.
+  </p>
+</main>
+
+<script>
+const fields = {
+  decimal: { base: 10, pattern: /^-?\d+$/, label: "Decimal" },
+  binary: { base: 2, pattern: /^-?[01]+$/, label: "Binary" },
+  octal: { base: 8, pattern: /^-?[0-7]+$/, label: "Octal" },
+  hexadecimal: { base: 16, pattern: /^-?[0-9a-f]+$/i, label: "Hexadecimal" }
+};
+
+const inputs = {};
+const messages = {};
+let activeField = null;
+
+for (const id in fields) {
+  inputs[id] = document.getElementById(id);
+  messages[id] = document.getElementById(id + "Msg");
+
+  inputs[id].addEventListener("input", () => convert(id));
+}
+
+function convert(source) {
+  activeField = source;
+
+  const raw = inputs[source].value.trim();
+  const config = fields[source];
+
+  for (const id in fields) {
+    inputs[id].classList.remove("invalid");
+    messages[id].textContent = "";
+  }
+
+  document.getElementById("status").textContent = "";
+
+  if (raw === "") {
+    clearOtherFields(source);
+    return;
+  }
+
+  if (!config.pattern.test(raw)) {
+    showError(source, `Enter a valid ${config.label.toLowerCase()} integer.`);
+    clearOtherFields(source);
+    return;
+  }
+
+  const number = Number.parseInt(raw, config.base);
+
+  if (!Number.isSafeInteger(number)) {
+    showError(source, "Enter an integer between -(2^53 - 1) and 2^53 - 1.");
+    clearOtherFields(source);
+    return;
+  }
+
+  for (const id in fields) {
+    if (id === source) continue;
+
+    inputs[id].value = number.toString(fields[id].base).toUpperCase();
+  }
+}
+
+function showError(id, message) {
+  inputs[id].classList.add("invalid");
+  messages[id].textContent = message;
+}
+
+function clearOtherFields(source) {
+  for (const id in fields) {
+    if (id !== source) {
+      inputs[id].value = "";
+    }
+  }
+}
+
+document.getElementById("clearBtn").addEventListener("click", () => {
+  for (const id in fields) {
+    inputs[id].value = "";
+    inputs[id].classList.remove("invalid");
+    messages[id].textContent = "";
+  }
+
+  document.getElementById("status").textContent = "";
+  activeField = null;
+  inputs.decimal.focus();
+});
+
+document.querySelectorAll("[data-copy]").forEach(button => {
+  button.addEventListener("click", async () => {
+    const id = button.dataset.copy;
+    const value = inputs[id].value;
+
+    if (!value) {
+      document.getElementById("status").textContent =
+        "Enter a number before copying.";
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(value);
+      document.getElementById("status").textContent =
+        fields[id].label + " value copied.";
+    } catch {
+      inputs[id].select();
+      const copied = document.execCommand("copy");
+
+      document.getElementById("status").textContent = copied
+        ? fields[id].label + " value copied."
+        : "Copy is unavailable. Select and copy the value manually.";
+    }
+  });
+});
+</script>
+</body>
+</html>
